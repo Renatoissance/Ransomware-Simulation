@@ -1,3 +1,5 @@
+> ⚠️ **Disclaimer:** This project is a Proof of Concept (PoC) designed strictly for educational purposes and cybersecurity research. Do not execute this code on any system or network without explicit permission.
+
 # Phase 1: Threat Simulation & Exploitation (Red Team)
 
 ## Overview
@@ -15,28 +17,27 @@ for i in {1..100}; do echo "Dies ist ein extrem wichtiges Firmendokument Nummer 
 ```
 
 <p align="center">
-  <img src="img/Ransomware-Simulation1.png" alt="Terminal command generating dummy files" width="100%">
-</p>
-
-<p align="center">
   <img src="img/Ransomware-Simulation2.png" alt="Directory populated with 100 text files" width="100%">
+  <br><i>The target directory after successfully provisioning 100 dummy files.</i>
 </p>
 
 ## Step 2: Payload Execution
 Upon execution, `attacker.py` performs the following automated steps:
-1. Generates a unique cryptographic key (`secret.key`) and saves it locally. In a real-world scenario, this key would be exfiltrated to an external Command and Control (C2) server.
-2. Iterates through the predefined target directory.
-3. Reads the binary data of each file, encrypts it, overwrites the original file, and appends the `.locked` extension to the filename.
+1. **Key Generation:** Generates a unique cryptographic key (`secret.key`) and saves it locally. In a real-world scenario, this key would be exfiltrated to an external Command and Control (C2) server.
+2. **File Iteration:** Iterates through the predefined target directory.
+3. **Encryption & Renaming:** Reads the binary data of each file, encrypts it using the AES-based Fernet scheme, overwrites the original data, and appends the `.locked` extension.
 
 <p align="center">
   <img src="img/Ransomware-Simulation3.png" alt="Script encrypting files rapidly" width="100%">
+  <br><i>Execution of the attacker.py script targeting the dummy directory.</i>
 </p>
 
 <p align="center">
   <img src="img/Ransomware-Simulation4.png" alt="Attack completion output" width="100%">
+  <br><i>Terminal output confirming the successful encryption of all 100 files.</i>
 </p>
 
-After the script finishes, the unique decryption key is left in the working directory (simulating the key the attacker holds).
+After the script finishes, the unique decryption key is left in the working directory, simulating the asset an attacker would hold for ransom.
 
 <p align="center">
   <img src="img/Ransomware-Simulation5.png" alt="Attacker script and generated secret key" width="100%">
@@ -47,12 +48,14 @@ Once the encryption process concludes, the target directory is completely compro
 
 <p align="center">
   <img src="img/Ransomware-Simulation6.png" alt="Directory showing locked files and ransom note" width="100%">
+  <br><i>The compromised directory showing modified extensions and the dropped ransom note.</i>
 </p>
 
 Attempting to read the contents of the encrypted files reveals completely obfuscated ciphertext, verifying the success of the AES encryption layer.
 
 <p align="center">
   <img src="img/Ransomware-Simulation8.png" alt="Encrypted ciphertext inside a locked file" width="100%">
+  <br><i>Viewing the unreadable AES ciphertext of an encrypted dummy document.</i>
 </p>
 
 The ransom note instructs the user on how to theoretically recover their data.
@@ -66,8 +69,12 @@ It is worth noting that while working on this code in a shared host-to-VM folder
 
 <p align="center">
   <img src="img/Ransomware-Simulation0.png" alt="Windows Defender catching the script as a Trojan" width="100%">
+  <br><i>Microsoft Defender intercepting the custom payload via behavioral heuristics.</i>
 </p>
 
 The heuristic engine classified the script as `Trojan:Python/FileCoder.AI!MTB`, highlighting that the programmed behavior (rapid file iteration, cryptography imports, file extension modification) perfectly mirrors actual threat actor tooling.
 
-TO BE CONTINUED...
+---
+
+### Next Steps:
+➡️ **[Phase 2: Incident Response & Blue Team Canary Defense](#)** *(Coming soon)*
