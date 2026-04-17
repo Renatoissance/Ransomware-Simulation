@@ -76,5 +76,42 @@ The heuristic engine classified the script as `Trojan:Python/FileCoder.AI!MTB`, 
 
 ---
 
+# Phase 2: Incident Response & Recovery (Blue Team)
+
+## Overview
+Once the threat has been identified and the cryptographic key has been secured, the incident response (IR) phase begins. This stage focuses on data recovery and system restoration. For this PoC, a dedicated recovery tool (`decrypter.py`) was developed to reverse the encryption and restore the organization's critical data.
+
+## Step 1: Key Acquisition
+In a real-world scenario, the decryption key is either provided after a ransom payment (not recommended) or recovered through forensic analysis of the attacker's infrastructure. In our simulation, the key was located in the working directory.
+
+<p align="center">
+  <img src="img/Ransomware-Simulation9.png" alt="Viewing the secret key via terminal" width="100%">
+  <br><i>Forensic acquisition of the Base64 encoded Fernet key.</i>
+</p>
+
+## Step 2: Restoration Process
+The `decrypter.py` script (available in the `/src` directory) was deployed to the affected endpoint. The script performs the following operations:
+1. **Key Loading:** Authenticates and loads the `secret.key`.
+2. **Reverse Iteration:** Scans for all files with the `.locked` extension.
+3. **Decryption:** Decrypts the binary data and overwrites the files with their original, readable content.
+4. **Filename Restoration:** Removes the `.locked` suffix to return the files to their original state.
+
+<p align="center">
+  <img src="img/Ransomware-Simulation11.png" alt="Running the decrypter script" width="100%">
+  <br><i>Execution of the Incident Response payload to initiate data recovery.</i>
+</p>
+
+## Step 3: Verification & Cleanup
+The final stage of the IR process is verifying that the data is intact and removing any remaining artifacts left by the attacker.
+
+<p align="center">
+  <img src="img/Ransomware-Simulation10.png" alt="Successful decryption and cleanup" width="100%">
+  <br><i>The decrypter confirms the restoration of files and the deletion of the ransom note.</i>
+</p>
+
+The system is now fully restored. All 100 dummy files are readable again, and the security breach has been remediated.
+
+---
+
 ### Next Steps:
-➡️ **[Phase 2: Incident Response & Blue Team Canary Defense](#)** *(Coming soon)*
+➡️ **[Phase 3: Active Defense & Canary Agent Simulation](#)** *(Work in Progress)*
