@@ -112,6 +112,40 @@ The final stage of the IR process is verifying that the data is intact and remov
 The system is now fully restored. All 100 dummy files are readable again, and the security breach has been remediated.
 
 ---
+# Phase 3: Active Defense & Canary Agent Simulation (EDR/Sentinel)
 
-### Next Steps:
-➡️ **[Phase 3: Active Defense & Canary Agent Simulation](#)** *(Work in Progress)*
+## Overview
+While Phase 2 focused on reactive Incident Response (IR) after the damage was done, Phase 3 introduces proactive **Active Defense**. For this, a custom background agent (`sentinel.py`) was developed to act as a localized Endpoint Detection and Response (EDR) tool. 
+
+Instead of relying on static file signatures (which fail against custom/zero-day payloads like our `attacker.py`), the Sentinel utilizes **Behavioral Heuristics**. It monitors the filesystem in real-time via the `watchdog` library, specifically looking for the rapid creation of `.locked` extensions—a classic Indicator of Compromise (IoC) for ransomware.
+
+## Execution & Detection in Real-Time
+The Sentinel agent was deployed to monitor the target directory. Shortly after, the `attacker.py` payload was executed. 
+
+<p align="center">
+  <img src="img/Ransomware-Simulation11.png" alt="Sentinel detecting the attack in real-time" width="100%">
+  <br><i>The Sentinel agent successfully identifying the behavioral pattern and triggering critical alerts.</i>
+</p>
+
+Within milliseconds of the first file modification, the Sentinel recognized the malicious intent, isolated the path, and generated forensic log output directly to the terminal.
+
+## Key Takeaway: Detection vs. Prevention & The Race Condition
+A critical observation in this simulation is that several files were still successfully encrypted before the simulated "Kill-Switch" was triggered. This perfectly illustrates a fundamental concept in cybersecurity: **The Race Condition**.
+
+* **Mean Time to Detect (MTTD):** The Sentinel dropped the MTTD from potentially days (industry average) to milliseconds.
+* **Damage Mitigation:** Because Python executes operations incredibly fast, a few "Canary" files were lost. However, identifying the attack on the first few files allows an EDR system to terminate the malicious process before it can traverse the network or encrypt critical databases. 
+
+In a fully scaled enterprise environment, the Sentinel's alert would trigger an automated network isolation API, stopping Lateral Movement dead in its tracks.
+
+---
+
+# 🎓 Project Conclusion & Lessons Learned
+
+This Proof of Concept successfully demonstrates the complete lifecycle of a modern cyber threat and its corresponding defenses:
+1. **Red Team:** Weaponizing cryptography and automating file destruction.
+2. **Incident Response:** Forensic key recovery and systematic data restoration.
+3. **Blue Team/Defense:** Implementing heuristic behavioral monitoring to bridge the gap where traditional AV fails.
+
+By building both the weapon and the shield, this project highlights the necessity of "Defense in Depth"—proving that robust security requires not just backups and decrypters, but proactive, behavior-based monitoring.
+
+> **Final Reminder:** All tools developed in this repository are strictly for educational purposes and internal lab testing.
