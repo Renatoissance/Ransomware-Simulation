@@ -124,14 +124,14 @@ Instead of relying on static file signatures (which fail against custom/zero-day
 First, the Sentinel agent is deployed to monitor the isolated target directory. It runs quietly in the background, continuously scanning for heuristic patterns.
 
 <p align="center">
-  <img src="img/Ransomware-Simulation12.png" alt="Sentinel initializing and monitoring the directory" width="100%">
+  <img src="img/Ransomware-Simulation11.png" alt="Sentinel initializing and monitoring the directory" width="100%">
   <br><i>The Sentinel agent successfully starting up and actively watching the target directory.</i>
 </p>
 
 Shortly after the defense is armed, the `attacker.py` payload is executed in a separate process. Within milliseconds of the first file modification, the Sentinel recognizes the malicious intent, isolates the path, and generates forensic log output directly to the terminal.
 
 <p align="center">
-  <img src="img/Ransomware-Simulation11.png" alt="Sentinel detecting the attack in real-time" width="100%">
+  <img src="img/Ransomware-Simulation12.png" alt="Sentinel detecting the attack in real-time" width="100%">
   <br><i>The Active Defense system identifying the behavioral pattern and triggering critical alerts.</i>
 </p>
 
