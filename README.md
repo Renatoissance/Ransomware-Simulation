@@ -112,6 +112,7 @@ The final stage of the IR process is verifying that the data is intact and remov
 The system is now fully restored. All 100 dummy files are readable again, and the security breach has been remediated.
 
 ---
+
 # Phase 3: Active Defense & Canary Agent Simulation (EDR/Sentinel)
 
 ## Overview
@@ -119,15 +120,20 @@ While Phase 2 focused on reactive Incident Response (IR) after the damage was do
 
 Instead of relying on static file signatures (which fail against custom/zero-day payloads like our `attacker.py`), the Sentinel utilizes **Behavioral Heuristics**. It monitors the filesystem in real-time via the `watchdog` library, specifically looking for the rapid creation of `.locked` extensions—a classic Indicator of Compromise (IoC) for ransomware.
 
-## Execution & Detection in Real-Time
-The Sentinel agent was deployed to monitor the target directory. Shortly after, the `attacker.py` payload was executed. 
+## Execution & Real-Time Detection
+First, the Sentinel agent is deployed to monitor the isolated target directory. It runs quietly in the background, continuously scanning for heuristic patterns.
+
+<p align="center">
+  <img src="img/Ransomware-Simulation12.png" alt="Sentinel initializing and monitoring the directory" width="100%">
+  <br><i>The Sentinel agent successfully starting up and actively watching the target directory.</i>
+</p>
+
+Shortly after the defense is armed, the `attacker.py` payload is executed in a separate process. Within milliseconds of the first file modification, the Sentinel recognizes the malicious intent, isolates the path, and generates forensic log output directly to the terminal.
 
 <p align="center">
   <img src="img/Ransomware-Simulation11.png" alt="Sentinel detecting the attack in real-time" width="100%">
-  <br><i>The Sentinel agent successfully identifying the behavioral pattern and triggering critical alerts.</i>
+  <br><i>The Active Defense system identifying the behavioral pattern and triggering critical alerts.</i>
 </p>
-
-Within milliseconds of the first file modification, the Sentinel recognized the malicious intent, isolated the path, and generated forensic log output directly to the terminal.
 
 ## Key Takeaway: Detection vs. Prevention & The Race Condition
 A critical observation in this simulation is that several files were still successfully encrypted before the simulated "Kill-Switch" was triggered. This perfectly illustrates a fundamental concept in cybersecurity: **The Race Condition**.
